@@ -82,7 +82,7 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             // Placeholder for dynamic image loading based on routine
             // For now, using a generic icon for all routines in the library view
             Image(
-                painter = painterResource(id = R.drawable.ic_stretch_placeholder_routine), // Replace with actual dynamic logic if needed
+                painter = painterResource(id = R.drawable.ic_stretch_placeholder), // Replace with actual dynamic logic if needed
                 contentDescription = routine.name,
                 modifier = Modifier
                     .size(80.dp) // Slightly larger image
