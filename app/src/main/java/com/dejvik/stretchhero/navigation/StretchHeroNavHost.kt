@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.dejvik.stretchhero.ui.screens.HomeScreen // Added import
 import com.dejvik.stretchhero.ui.screens.StretchLibraryScreen
 import com.dejvik.stretchhero.ui.screens.StretchRoutineScreen
 import com.dejvik.stretchhero.ui.theme.DarkGray
@@ -21,9 +22,12 @@ fun StretchHeroNavHost() {
     Scaffold(containerColor = DarkGray) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.StretchLibrary.route,
+            startDestination = Screen.Home.route, // Changed startDestination
             modifier = Modifier.padding(padding)
         ) {
+            composable(Screen.Home.route) { // Added HomeScreen composable
+                HomeScreen(navController)
+            }
             composable(Screen.StretchLibrary.route) {
                 StretchLibraryScreen(navController)
             }
