@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily // Ensured import
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +51,7 @@ fun StretchLibraryScreen(navController: NavController) {
         Text(
             text = "Stretch Routines",
             fontSize = 28.sp,
+            fontFamily = FontFamily.Default, // Changed from montserratFont (implicitly, as it's not set)
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp),
             color = Color(0xFF333333) // Darker text color
@@ -94,6 +96,7 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                 Text(
                     text = routine.name,
                     fontSize = 20.sp, // Slightly larger title
+                    fontFamily = FontFamily.Default, // Changed from montserratFont (implicitly, as it's not set)
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF333333)
                 )
@@ -101,6 +104,7 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                 Text(
                     text = "Estimated time: ${routine.steps.sumOf { it.duration } / 60} min",
                     fontSize = 14.sp,
+                    fontFamily = FontFamily.Default, // Changed from montserratFont (implicitly, as it's not set)
                     color = Color.Gray
                 )
             }
