@@ -1,5 +1,6 @@
 package com.dejvik.stretchhero.navigation
 
+import com.dejvik.stretchhero.navigation.Screen // Added import
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
