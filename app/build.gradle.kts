@@ -21,7 +21,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     buildTypes {
@@ -59,8 +59,8 @@ dependencies {
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.compose.ui:ui:1.5.3")
-    implementation("androidx.compose.material3:material3:1.1.2")
+    // implementation("androidx.compose.ui:ui:1.5.3") // Removed for BOM
+    // implementation("androidx.compose.material3:material3:1.1.2") // Removed for BOM
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
     androidTestImplementation(libs.androidx.junit)
