@@ -1,5 +1,6 @@
 package com.dejvik.stretchhero.ui.screens
 
+import androidx.compose.material3.ExperimentalMaterial3Api // Added import
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -26,6 +27,7 @@ import com.dejvik.stretchhero.ui.theme.MutedRed
 import com.dejvik.stretchhero.ui.theme.SoftWhite
 import com.dejvik.stretchhero.ui.theme.montserratFont
 
+@OptIn(ExperimentalMaterial3Api::class) // Added annotation
 @Composable
 fun StretchRoutineScreen(
     navController: NavController,
