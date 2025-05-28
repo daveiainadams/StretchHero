@@ -1,187 +1,225 @@
 package com.dejvik.stretchhero.ui.screens
 
-import android.speech.tts.TextToSpeech
+import androidx.compose.material3.ExperimentalMaterial3Api // Added import
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.dejvik.stretchhero.R
+import com.dejvik.stretchhero.utils.TextToSpeechHelper
+import com.dejvik.stretchhero.ui.theme.MutedRed
 import com.dejvik.stretchhero.ui.theme.SoftWhite
-import com.dejvik.stretchhero.ui.theme.montserratFont
-import java.util.Locale
+import com.dejvik.stretchhero.ui.theme.montserratFont // Added import
+// import androidx.compose.ui.text.font.FontFamily // Commented out
 
+@OptIn(ExperimentalMaterial3Api::class) // Added annotation
 @Composable
-fun StretchRoutineScreen(routineName: String) {
-    val steps = when (routineName) {
-        "Beginner Full Body Stretch" -> listOf(
-            "Neck Rolls – 30 seconds",
-            "Shoulder Rolls – 30 seconds",
-            "Overhead Side Stretch – 30 seconds per side",
-            "Seated Forward Fold – 45 seconds",
-            "Supine Spinal Twist – 45 seconds per side"
-        )
-        "Morning Wake-Up Stretch" -> listOf(
-            "Standing Reach and Sway – 30 seconds",
-            "Cat-Cow Pose – 45 seconds",
-            "Downward Dog – 45 seconds",
-            "Low Lunge Stretch – 30 seconds per side",
-            "Standing Forward Fold – 30 seconds"
-        )
-        "Post-Workout Cool Down" -> listOf(
-            "Child's Pose – 60 seconds",
-            "Kneeling Hip Flexor Stretch – 30 seconds per side",
-            "Figure Four Stretch – 30 seconds per side",
-            "Standing Quad Stretch – 30 seconds per leg",
-            "Cross-Body Shoulder Stretch – 30 seconds per arm"
-        )
-        "Evening Relaxation Stretch" -> listOf(
-            "Legs Up the Wall – 2 minutes",
-            "Seated Forward Fold – 1 minute",
-            "Butterfly Pose – 1 minute",
-            "Reclined Twist – 1 minute per side",
-            "Child's Pose – 2 minutes"
-        )
-        "Lower Back & Hamstring Relief" -> listOf(
-            "Knees-to-Chest Pose – 1 minute",
-            "Supine Hamstring Stretch – 45 seconds per leg",
-            "Cat-Cow Pose – 1 minute",
-            "Piriformis Stretch – 30 seconds per side",
-            "Seated Forward Fold – 1 minute"
-        )
-        else -> listOf("Stretch routine not found.")
-    }
-
-    fun parseDuration(text: String): Int {
-        return when {
-            text.contains("2 minutes") -> 120
-            text.contains("1 minute") -> 60
-            text.contains("60 seconds") -> 60
-            text.contains("45 seconds") -> 45
-            text.contains("30 seconds") -> 30
-            else -> 30
-        }
-    }
-
+fun StretchRoutineScreen(
+    navController: NavController,
+    routineId: String,
+    viewModel: RoutineViewModel = viewModel()
+) {
     val context = LocalContext.current
-    val tts = remember(context) {
-        TextToSpeech(context) { /* you can log init status here if needed */ }
-    }.apply {
-        language = Locale.UK
+    val ttsHelper = remember { TextToSpeechHelper(context) }
+
+    LaunchedEffect(routineId) {
+        viewModel.loadRoutine(routineId)
     }
 
+    val currentRoutine = viewModel.currentRoutine.value
+    val currentStepIndex = viewModel.currentStepIndex.value
+    val timeLeft = viewModel.timeLeftInSeconds.value
+    val isRunning = viewModel.timerRunning.value
+    val routineComplete = viewModel.routineComplete.value
+    val routineFound = viewModel.routineFound.value
 
-    var currentStepIndex by remember { mutableStateOf(0) }
-    var timerRunning by remember { mutableStateOf(false) }
-    var timeLeft by remember { mutableStateOf(0) }
-    val routineComplete = currentStepIndex >= steps.size
+    val currentStep = currentRoutine?.steps?.getOrNull(currentStepIndex)
 
-    val currentStepText = steps.getOrElse(currentStepIndex) { "Routine complete!" }
+    // Animation for timer
+    val animatedTimeLeft by animateIntAsState(
+        targetValue = timeLeft,
+        animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+    )
 
-    LaunchedEffect(timerRunning, timeLeft) {
-        if (timerRunning && timeLeft > 0) {
-            delay(1000L)
-            timeLeft--
-        } else if (timerRunning && timeLeft == 0) {
-            timerRunning = false
-            if (currentStepIndex < steps.lastIndex) {
-                currentStepIndex++
-                val nextText = steps[currentStepIndex]
-                timeLeft = parseDuration(nextText)
-                tts.speak(nextText, TextToSpeech.QUEUE_FLUSH, null, null)
-                timerRunning = true
+    // Speak when the step changes
+    LaunchedEffect(currentStep) {
+        currentStep?.name?.let {
+            if (isRunning || timeLeft == currentStep.duration) { // Speak if timer just started or step changed while timer was running
+                 ttsHelper.speak(it)
             }
         }
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = routineName,
-            style = MaterialTheme.typography.headlineSmall,
-            color = SoftWhite,
-            fontFamily = montserratFont
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
+     LaunchedEffect(routineComplete) {
         if (routineComplete) {
-            Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Well done! You've completed the routine.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = SoftWhite,
-                        fontFamily = montserratFont
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Button(onClick = {
-                        currentStepIndex = 0
-                        timeLeft = 0
-                        timerRunning = false
+            ttsHelper.speak("Routine complete. Well done!")
+            navController.popBackStack() // Navigate back when routine is done
+        }
+    }
+
+
+    DisposableEffect(ttsHelper) {
+        onDispose {
+            viewModel.stopTimer() // Stop timer if screen is disposed
+            ttsHelper.shutdown()
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = montserratFont, color = SoftWhite) },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.stopTimer()
+                        navController.popBackStack()
                     }) {
-                        Text("Restart Routine", fontFamily = montserratFont)
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = SoftWhite)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MutedRed)
+            )
+        },
+        containerColor = Color.DarkGray
+    ) { paddingValues ->
+
+        if (!routineFound) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Routine not found. Please go back and select a valid routine.",
+                    fontSize = 20.sp,
+                    color = SoftWhite,
+                    fontFamily = montserratFont,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
             }
-        } else {
-            Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            return@Scaffold
+        }
+
+        if (currentStep == null) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                // This case should ideally be less frequent if routineFound handles the primary "not found"
+                // Still, good for robustness if a loaded routine has no steps.
+                Text("Loading routine or routine has no steps...", fontSize = 20.sp, color = SoftWhite)
+            }
+            return@Scaffold
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = currentStep.name,
+                    fontSize = 24.sp,
+                    fontFamily = montserratFont,
+                    color = SoftWhite,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                val imageResId = remember(currentStep.imageResIdName) {
+                    context.resources.getIdentifier(
+                        currentStep.imageResIdName,
+                        "drawable",
+                        context.packageName
+                    ).takeIf { it != 0 } ?: R.drawable.ic_stretch_placeholder
+                }
+
+                Image(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = "Stretch Image: ${currentStep.name}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .padding(vertical = 16.dp)
+                        .alpha(0.8f)
+                )
+                Text(
+                    // Display the animated time, or the step duration if timer not running and it's full
+                    text = if (isRunning || timeLeft < currentStep.duration) "$animatedTimeLeft s" else "${currentStep.duration} s",
+                    fontSize = 48.sp,
+                    fontFamily = montserratFont,
+                    color = SoftWhite,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+                        // This functionality needs to be added to ViewModel
+                        // For now, let's disable or think about how to implement "previous"
+                        // viewModel.moveToPreviousStep() // if implemented
+                    },
+                    enabled = currentStepIndex > 0 // viewModel.canMoveToPrevious.value
                 ) {
-                    Image(
-                        painter = painterResource(id = when (currentStepIndex) {
-                            0 -> R.drawable.ic_stretch_neck
-                            1 -> R.drawable.ic_stretch_shoulder
-                            2 -> R.drawable.ic_stretch_side
-                            3 -> R.drawable.ic_stretch_forward_fold
-                            4 -> R.drawable.ic_stretch_twist
-                            else -> R.drawable.ic_stretch_placeholder
-                        }),
-                        contentDescription = "Stretch Step",
-                        modifier = Modifier.size(120.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = currentStepText,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = SoftWhite,
-                        fontFamily = montserratFont
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Time Left: $timeLeft seconds",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = SoftWhite,
-                        fontFamily = montserratFont
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = {
-                        if (!timerRunning) {
-                            timeLeft = parseDuration(currentStepText)
-                            tts.speak(currentStepText, TextToSpeech.QUEUE_FLUSH, null, null)
-                            timerRunning = true
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Previous Step", tint = SoftWhite, modifier = Modifier.size(48.dp))
+                }
+
+                IconButton(
+                    onClick = {
+                        if (isRunning) {
+                            viewModel.stopTimer()
+                        } else {
+                            viewModel.startStepTimer()
+                            // TTS is handled by LaunchedEffect(currentStep) when isRunning becomes true
                         }
-                    }) {
-                        Text("Start Stretch", fontFamily = montserratFont)
-                    }
+                    },
+                    modifier = Modifier.size(72.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isRunning) Icons.Filled.Refresh else Icons.Filled.PlayArrow, // Should be Pause icon if running
+                        contentDescription = if (isRunning) "Pause Timer" else "Start Timer",
+                        tint = SoftWhite,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        viewModel.stopTimer() // Stop current timer before moving
+                        viewModel.moveToNextStep()
+                         // TTS for next step handled by LaunchedEffect(currentStep)
+                    },
+                    enabled = currentStepIndex < (currentRoutine.steps.size - 1)
+                ) {
+                    Icon(Icons.Filled.ArrowForward, contentDescription = "Next Step", tint = SoftWhite, modifier = Modifier.size(48.dp))
                 }
             }
         }
