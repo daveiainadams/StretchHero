@@ -25,8 +25,8 @@ import com.dejvik.stretchhero.R
 import com.dejvik.stretchhero.utils.TextToSpeechHelper
 import com.dejvik.stretchhero.ui.theme.MutedRed
 import com.dejvik.stretchhero.ui.theme.SoftWhite
-import com.dejvik.stretchhero.ui.theme.montserratFont // Added import
-// import androidx.compose.ui.text.font.FontFamily // Commented out
+// import com.dejvik.stretchhero.ui.theme.montserratFont // Removed import
+import androidx.compose.ui.text.font.FontFamily // Ensured import for FontFamily.Default
 
 @OptIn(ExperimentalMaterial3Api::class) // Added annotation
 @Composable
@@ -83,7 +83,7 @@ fun StretchRoutineScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = montserratFont, color = SoftWhite) },
+                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = FontFamily.Default, color = SoftWhite) },
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.stopTimer()
@@ -110,7 +110,7 @@ fun StretchRoutineScreen(
                     text = "Routine not found. Please go back and select a valid routine.",
                     fontSize = 20.sp,
                     color = SoftWhite,
-                    fontFamily = montserratFont,
+                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
             }
@@ -142,7 +142,7 @@ fun StretchRoutineScreen(
                 Text(
                     text = currentStep.name,
                     fontSize = 24.sp,
-                    fontFamily = montserratFont,
+                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
                     color = SoftWhite,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -168,7 +168,7 @@ fun StretchRoutineScreen(
                     // Display the animated time, or the step duration if timer not running and it's full
                     text = if (isRunning || timeLeft < currentStep.duration) "$animatedTimeLeft s" else "${currentStep.duration} s",
                     fontSize = 48.sp,
-                    fontFamily = montserratFont,
+                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
                     color = SoftWhite,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )

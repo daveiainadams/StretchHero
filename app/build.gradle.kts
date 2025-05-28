@@ -62,7 +62,7 @@ dependencies {
     // implementation("androidx.compose.ui:ui:1.5.3") // Removed for BOM
     // implementation("androidx.compose.material3:material3:1.1.2") // Removed for BOM
     implementation("androidx.navigation:navigation-compose:2.7.5")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
+    // implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7") // Commented out
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     // androidTestImplementation(platform(libs.androidx.compose.bom)) // Commented out for test as well
