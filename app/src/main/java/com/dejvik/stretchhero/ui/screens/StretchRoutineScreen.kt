@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.dejvik.stretchhero.R
+import com.dejvik.stretchhero.navigation.Screen // Added import
 import com.dejvik.stretchhero.utils.TextToSpeechHelper
 import com.dejvik.stretchhero.ui.theme.MutedRed
 import com.dejvik.stretchhero.ui.theme.SoftWhite
@@ -87,7 +88,7 @@ fun StretchRoutineScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.stopTimer()
-                        navController.popBackStack()
+                        navController.navigate(Screen.Home.route) { popUpTo(Screen.Home.route) { inclusive = true }; launchSingleTop = true }
                     }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = SoftWhite)
                     }
