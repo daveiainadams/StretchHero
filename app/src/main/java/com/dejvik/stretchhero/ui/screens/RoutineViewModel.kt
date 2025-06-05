@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dejvik.stretchhero.data.Routine
 import com.dejvik.stretchhero.data.RoutineDataSource
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -14,11 +15,14 @@ class RoutineViewModel : ViewModel() {
     val currentStepIndex: MutableState<Int> = mutableStateOf(0)
     val timeLeftInSeconds: MutableState<Int> = mutableStateOf(0)
     val timerRunning: MutableState<Boolean> = mutableStateOf(false)
+    private var timerJob: Job? = null
     val currentRoutine: MutableState<Routine?> = mutableStateOf(null)
     val routineComplete: MutableState<Boolean> = mutableStateOf(false)
     val routineFound: MutableState<Boolean> = mutableStateOf(true)
 
     fun loadRoutine(routineId: String) {
+        timerJob?.cancel()
+        timerJob = null
         val routine = RoutineDataSource.getRoutineById(routineId)
         if (routine != null) {
             currentRoutine.value = routine
@@ -42,23 +46,22 @@ class RoutineViewModel : ViewModel() {
     }
 
     fun startStepTimer() {
+        if (timerRunning.value) return
         if (currentRoutine.value != null && !routineComplete.value) {
             val currentStep = currentRoutine.value?.steps?.getOrNull(currentStepIndex.value)
             if (currentStep != null) {
-                // If timer was 0 or not running for the current step, set its duration
-                if (timeLeftInSeconds.value == 0 || !timerRunning.value) {
-                     timeLeftInSeconds.value = currentStep.duration
+                if (timeLeftInSeconds.value == 0) {
+                    timeLeftInSeconds.value = currentStep.duration
                 }
                 timerRunning.value = true
-
-                viewModelScope.launch {
+                timerJob = viewModelScope.launch {
                     while (timeLeftInSeconds.value > 0 && timerRunning.value) {
                         delay(1000L)
-                        if (timerRunning.value) { // Check again in case timer was stopped during delay
+                        if (timerRunning.value) {
                             timeLeftInSeconds.value--
                         }
                     }
-                    if (timerRunning.value) { // Timer completed naturally
+                    if (timerRunning.value) {
                         timerRunning.value = false
                         moveToNextStep()
                     }
@@ -90,5 +93,7 @@ class RoutineViewModel : ViewModel() {
 
     fun stopTimer() {
         timerRunning.value = false
+        timerJob?.cancel()
+        timerJob = null
     }
 }
