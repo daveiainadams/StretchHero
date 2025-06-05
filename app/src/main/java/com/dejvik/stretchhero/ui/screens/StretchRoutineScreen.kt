@@ -228,6 +228,16 @@ fun StretchRoutineScreen(
                     Icon(Icons.Filled.ArrowForward, contentDescription = "Next Step", tint = MaterialTheme.colorScheme.onBackground, modifier = Modifier.size(48.dp))
                 }
             }
+
+            Button(
+                onClick = {
+                    viewModel.stopTimer()
+                    navController.popBackStack()
+                },
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text("Back", fontFamily = montserratFont)
+            }
         }
     }
 }

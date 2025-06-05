@@ -1,5 +1,6 @@
 package com.dejvik.stretchhero.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import com.dejvik.stretchhero.ui.theme.montserratFont
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,12 @@ fun HomeScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Image(
+            painter = painterResource(id = com.dejvik.stretchhero.R.drawable.stretchhero_logo),
+            contentDescription = "App Logo",
+            modifier = Modifier.height(120.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Stretch Hero",
             fontSize = 32.sp,
