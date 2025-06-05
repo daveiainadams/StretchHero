@@ -20,10 +20,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.dejvik.stretchhero.ui.theme.montserratFont
@@ -45,7 +47,7 @@ fun StretchLibraryScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8)) // Light background color
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
         Text(
@@ -54,7 +56,7 @@ fun StretchLibraryScreen(navController: NavController) {
             fontFamily = montserratFont,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp),
-            color = Color(0xFF333333) // Darker text color
+            color = MaterialTheme.colorScheme.onBackground
         )
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             items(routines) { routine ->
@@ -66,6 +68,15 @@ fun StretchLibraryScreen(navController: NavController) {
 
 @Composable
 fun RoutineCard(routine: Routine, navController: NavController) {
+    val context = LocalContext.current
+    val imageResId = remember(routine.id) {
+        context.resources.getIdentifier(
+            routine.steps.firstOrNull()?.imageResIdName ?: "",
+            "drawable",
+            context.packageName
+        ).takeIf { it != 0 } ?: R.drawable.ic_stretch_placeholder
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,17 +85,15 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             }
             .clip(RoundedCornerShape(12.dp)), // More rounded corners
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Placeholder for dynamic image loading based on routine
-            // For now, using a generic icon for all routines in the library view
             Image(
-                painter = painterResource(id = R.drawable.ic_stretch_placeholder), // Replace with actual dynamic logic if needed
+                painter = painterResource(id = imageResId),
                 contentDescription = routine.name,
                 modifier = Modifier
                     .size(80.dp) // Slightly larger image
@@ -98,14 +107,14 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                     fontSize = 20.sp, // Slightly larger title
                     fontFamily = montserratFont,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF333333)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Estimated time: ${routine.steps.sumOf { it.duration } / 60} min",
                     fontSize = 14.sp,
                     fontFamily = montserratFont,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

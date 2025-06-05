@@ -83,6 +83,16 @@ class RoutineViewModel : ViewModel() {
         }
     }
 
+    fun moveToPreviousStep() {
+        currentRoutine.value?.let { routine ->
+            if (currentStepIndex.value > 0) {
+                currentStepIndex.value--
+                val prevStep = routine.steps[currentStepIndex.value]
+                timeLeftInSeconds.value = prevStep.duration
+            }
+        }
+    }
+
     fun restartRoutine() {
         currentRoutine.value?.id?.let {
             loadRoutine(it)
