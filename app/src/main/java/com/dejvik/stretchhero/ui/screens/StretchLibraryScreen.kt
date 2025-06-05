@@ -26,8 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily // Ensured import for FontFamily.Default
-// import com.dejvik.stretchhero.ui.theme.montserratFont // Removed import
+import com.dejvik.stretchhero.ui.theme.montserratFont
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,7 +51,7 @@ fun StretchLibraryScreen(navController: NavController) {
         Text(
             text = "Stretch Routines",
             fontSize = 28.sp,
-            // fontFamily parameter removed to use theme default (which is FontFamily.Default)
+            fontFamily = montserratFont,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 24.dp),
             color = Color(0xFF333333) // Darker text color
@@ -97,7 +96,7 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                 Text(
                     text = routine.name,
                     fontSize = 20.sp, // Slightly larger title
-                    // fontFamily parameter removed to use theme default (which is FontFamily.Default)
+                    fontFamily = montserratFont,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF333333)
                 )
@@ -105,7 +104,7 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                 Text(
                     text = "Estimated time: ${routine.steps.sumOf { it.duration } / 60} min",
                     fontSize = 14.sp,
-                    // fontFamily parameter removed to use theme default (which is FontFamily.Default)
+                    fontFamily = montserratFont,
                     color = Color.Gray
                 )
             }

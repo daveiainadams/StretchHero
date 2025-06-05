@@ -26,8 +26,7 @@ import com.dejvik.stretchhero.navigation.Screen // Added import
 import com.dejvik.stretchhero.utils.TextToSpeechHelper
 import com.dejvik.stretchhero.ui.theme.MutedRed
 import com.dejvik.stretchhero.ui.theme.SoftWhite
-// import com.dejvik.stretchhero.ui.theme.montserratFont // Removed import
-import androidx.compose.ui.text.font.FontFamily // Ensured import for FontFamily.Default
+import com.dejvik.stretchhero.ui.theme.montserratFont
 
 @OptIn(ExperimentalMaterial3Api::class) // Added annotation
 @Composable
@@ -84,7 +83,7 @@ fun StretchRoutineScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = FontFamily.Default, color = SoftWhite) },
+                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = montserratFont, color = SoftWhite) },
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.stopTimer()
@@ -111,7 +110,7 @@ fun StretchRoutineScreen(
                     text = "Routine not found. Please go back and select a valid routine.",
                     fontSize = 20.sp,
                     color = SoftWhite,
-                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
+                    fontFamily = montserratFont,
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
             }
@@ -126,7 +125,7 @@ fun StretchRoutineScreen(
             ) {
                 // This case should ideally be less frequent if routineFound handles the primary "not found"
                 // Still, good for robustness if a loaded routine has no steps.
-                Text("Loading routine or routine has no steps...", fontSize = 20.sp, color = SoftWhite)
+                Text("Loading routine or routine has no steps...", fontSize = 20.sp, color = SoftWhite, fontFamily = montserratFont)
             }
             return@Scaffold
         }
@@ -143,7 +142,7 @@ fun StretchRoutineScreen(
                 Text(
                     text = currentStep.name,
                     fontSize = 24.sp,
-                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
+                    fontFamily = montserratFont,
                     color = SoftWhite,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -169,7 +168,7 @@ fun StretchRoutineScreen(
                     // Display the animated time, or the step duration if timer not running and it's full
                     text = if (isRunning || timeLeft < currentStep.duration) "$animatedTimeLeft s" else "${currentStep.duration} s",
                     fontSize = 48.sp,
-                    fontFamily = FontFamily.Default, // Changed to FontFamily.Default
+                    fontFamily = montserratFont,
                     color = SoftWhite,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
