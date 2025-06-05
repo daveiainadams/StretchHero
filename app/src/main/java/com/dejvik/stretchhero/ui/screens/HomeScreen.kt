@@ -12,8 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily // Ensured import for FontFamily.Default
-// import com.dejvik.stretchhero.ui.theme.montserratFont // Removed import
+import com.dejvik.stretchhero.ui.theme.montserratFont
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,14 +31,14 @@ fun HomeScreen(navController: NavController) {
     ) {
         Text(
             text = "Stretch Hero",
-            fontSize = 32.sp
-            // fontFamily parameter removed to use theme default (which is FontFamily.Default)
+            fontSize = 32.sp,
+            fontFamily = montserratFont
         )
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = {
             navController.navigate(Screen.StretchLibrary.route)
         }) {
-            Text("Begin Stretching")
+            Text("Begin Stretching", fontFamily = montserratFont)
         }
     }
 }

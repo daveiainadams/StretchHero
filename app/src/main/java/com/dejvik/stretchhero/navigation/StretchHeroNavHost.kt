@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.dejvik.stretchhero.ui.theme.montserratFont
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,7 +43,7 @@ fun StretchHeroNavHost() {
                     StretchRoutineScreen(navController = navController, routineId = routineId)
                 } else {
                     // Handle routine ID not found or null
-                    Text("Error: Routine ID missing or invalid.")
+                    Text("Error: Routine ID missing or invalid.", fontFamily = montserratFont)
                 }
             }
         }
