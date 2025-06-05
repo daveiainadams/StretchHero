@@ -15,12 +15,12 @@ import androidx.navigation.navArgument
 import com.dejvik.stretchhero.ui.screens.HomeScreen // Added import
 import com.dejvik.stretchhero.ui.screens.StretchLibraryScreen
 import com.dejvik.stretchhero.ui.screens.StretchRoutineScreen
-import com.dejvik.stretchhero.ui.theme.DarkGray
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun StretchHeroNavHost() {
     val navController = rememberNavController()
-    Scaffold(containerColor = DarkGray) { padding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route, // Changed startDestination

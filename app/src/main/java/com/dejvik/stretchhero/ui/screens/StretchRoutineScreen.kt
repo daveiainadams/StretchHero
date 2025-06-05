@@ -8,13 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,8 +23,6 @@ import androidx.navigation.NavController
 import com.dejvik.stretchhero.R
 import com.dejvik.stretchhero.navigation.Screen // Added import
 import com.dejvik.stretchhero.utils.TextToSpeechHelper
-import com.dejvik.stretchhero.ui.theme.MutedRed
-import com.dejvik.stretchhero.ui.theme.SoftWhite
 import com.dejvik.stretchhero.ui.theme.montserratFont
 
 @OptIn(ExperimentalMaterial3Api::class) // Added annotation
@@ -83,19 +80,19 @@ fun StretchRoutineScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = montserratFont, color = SoftWhite) },
+                title = { Text(currentRoutine?.name ?: "Loading...", fontFamily = montserratFont, color = MaterialTheme.colorScheme.onPrimary) },
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.stopTimer()
                         navController.navigate(Screen.Home.route) { popUpTo(Screen.Home.route) { inclusive = true }; launchSingleTop = true }
                     }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = SoftWhite)
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MutedRed)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
-        containerColor = Color.DarkGray
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
 
         if (!routineFound) {
@@ -109,7 +106,7 @@ fun StretchRoutineScreen(
                 Text(
                     text = "Routine not found. Please go back and select a valid routine.",
                     fontSize = 20.sp,
-                    color = SoftWhite,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontFamily = montserratFont,
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
@@ -125,7 +122,7 @@ fun StretchRoutineScreen(
             ) {
                 // This case should ideally be less frequent if routineFound handles the primary "not found"
                 // Still, good for robustness if a loaded routine has no steps.
-                Text("Loading routine or routine has no steps...", fontSize = 20.sp, color = SoftWhite, fontFamily = montserratFont)
+                Text("Loading routine or routine has no steps...", fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground, fontFamily = montserratFont)
             }
             return@Scaffold
         }
@@ -143,8 +140,20 @@ fun StretchRoutineScreen(
                     text = currentStep.name,
                     fontSize = 24.sp,
                     fontFamily = montserratFont,
-                    color = SoftWhite,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "Step ${currentStepIndex + 1} of ${currentRoutine!!.steps.size}",
+                    fontFamily = montserratFont,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                LinearProgressIndicator(
+                    progress = (currentStepIndex + 1f) / currentRoutine!!.steps.size,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 val imageResId = remember(currentStep.imageResIdName) {
@@ -169,7 +178,7 @@ fun StretchRoutineScreen(
                     text = if (isRunning || timeLeft < currentStep.duration) "$animatedTimeLeft s" else "${currentStep.duration} s",
                     fontSize = 48.sp,
                     fontFamily = montserratFont,
-                    color = SoftWhite,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
             }
@@ -183,13 +192,12 @@ fun StretchRoutineScreen(
             ) {
                 IconButton(
                     onClick = {
-                        // This functionality needs to be added to ViewModel
-                        // For now, let's disable or think about how to implement "previous"
-                        // viewModel.moveToPreviousStep() // if implemented
+                        viewModel.stopTimer()
+                        viewModel.moveToPreviousStep()
                     },
-                    enabled = currentStepIndex > 0 // viewModel.canMoveToPrevious.value
+                    enabled = currentStepIndex > 0
                 ) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Previous Step", tint = SoftWhite, modifier = Modifier.size(48.dp))
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Previous Step", tint = MaterialTheme.colorScheme.onBackground, modifier = Modifier.size(48.dp))
                 }
 
                 IconButton(
@@ -198,28 +206,26 @@ fun StretchRoutineScreen(
                             viewModel.stopTimer()
                         } else {
                             viewModel.startStepTimer()
-                            // TTS is handled by LaunchedEffect(currentStep) when isRunning becomes true
                         }
                     },
                     modifier = Modifier.size(72.dp)
                 ) {
                     Icon(
-                        imageVector = if (isRunning) Icons.Filled.Refresh else Icons.Filled.PlayArrow, // Should be Pause icon if running
+                        imageVector = if (isRunning) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                         contentDescription = if (isRunning) "Pause Timer" else "Start Timer",
-                        tint = SoftWhite,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
                 IconButton(
                     onClick = {
-                        viewModel.stopTimer() // Stop current timer before moving
+                        viewModel.stopTimer()
                         viewModel.moveToNextStep()
-                         // TTS for next step handled by LaunchedEffect(currentStep)
                     },
                     enabled = currentStepIndex < (currentRoutine.steps.size - 1)
                 ) {
-                    Icon(Icons.Filled.ArrowForward, contentDescription = "Next Step", tint = SoftWhite, modifier = Modifier.size(48.dp))
+                    Icon(Icons.Filled.ArrowForward, contentDescription = "Next Step", tint = MaterialTheme.colorScheme.onBackground, modifier = Modifier.size(48.dp))
                 }
             }
         }
