@@ -11,7 +11,7 @@ import com.dejvik.stretchhero.R
 private val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
     providerPackage = "com.google.android.gms",
-    certificates = com.google.android.gms.R.array.com_google_android_gms_fonts_certs
+    certificates = R.array.com_google_android_gms_fonts_certs
 )
 
 val montserratFont = FontFamily(
