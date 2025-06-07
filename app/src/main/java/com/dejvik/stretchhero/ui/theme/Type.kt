@@ -2,22 +2,12 @@ package com.dejvik.stretchhero.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import com.google.android.gms.R
 
-private val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-
-val montserratFont = FontFamily(
-    Font(googleFont = GoogleFont("Montserrat"), fontProvider = provider, weight = FontWeight.Normal),
-    Font(googleFont = GoogleFont("Montserrat"), fontProvider = provider, weight = FontWeight.Bold)
-)
+// Use a generic sans-serif font family to avoid relying on Google Play
+// Services resources which are unavailable in this project.
+val montserratFont = FontFamily.SansSerif
 
 val Typography = Typography(
     displayLarge = TextStyle(fontFamily = montserratFont),
