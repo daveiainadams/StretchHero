@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
     // Needed for Icons.Filled.Pause and other extended material icons
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
+    implementation(libs.google.play.services.base)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     // androidTestImplementation(platform(libs.androidx.compose.bom)) // Commented out for test as well
