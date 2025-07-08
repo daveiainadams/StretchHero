@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,11 +40,13 @@ import com.dejvik.stretchhero.R
 import com.dejvik.stretchhero.data.Routine
 import com.dejvik.stretchhero.data.RoutineDataSource
 import com.dejvik.stretchhero.navigation.Screen
-
+import com.dejvik.stretchhero.utils.getDrawableResourceId
+import com.dejvik.stretchhero.utils.capitalizeFirst
 
 @Composable
 fun StretchLibraryScreen(navController: NavController) {
     val routines = RoutineDataSource.getAllRoutines()
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,9 +61,24 @@ fun StretchLibraryScreen(navController: NavController) {
             modifier = Modifier.padding(bottom = 24.dp),
             color = MaterialTheme.colorScheme.onBackground
         )
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(routines) { routine ->
-                RoutineCard(routine = routine, navController = navController)
+        
+        if (routines.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No routines available",
+                    fontSize = 18.sp,
+                    fontFamily = montserratFont,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                items(routines) { routine ->
+                    RoutineCard(routine = routine, navController = navController)
+                }
             }
         }
     }
@@ -70,11 +88,7 @@ fun StretchLibraryScreen(navController: NavController) {
 fun RoutineCard(routine: Routine, navController: NavController) {
     val context = LocalContext.current
     val imageResId = remember(routine.id) {
-        context.resources.getIdentifier(
-            routine.steps.firstOrNull()?.imageResIdName ?: "",
-            "drawable",
-            context.packageName
-        ).takeIf { it != 0 } ?: R.drawable.ic_stretch_placeholder
+        routine.steps.firstOrNull()?.imageResIdName?.getDrawableResourceId(context) ?: R.drawable.ic_stretch_placeholder
     }
 
     Card(
@@ -83,20 +97,19 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             .clickable {
                 navController.navigate(Screen.RoutineDetail.createRoute(routine.id))
             }
-            .clip(RoundedCornerShape(12.dp)), // More rounded corners
+            .clip(RoundedCornerShape(12.dp)),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
-            modifier = Modifier
-                .padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = imageResId),
                 contentDescription = routine.name,
                 modifier = Modifier
-                    .size(80.dp) // Slightly larger image
+                    .size(80.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -104,23 +117,39 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             Column {
                 Text(
                     text = routine.name,
-                    fontSize = 20.sp, // Slightly larger title
+                    fontSize = 20.sp,
                     fontFamily = montserratFont,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Estimated time: ${routine.steps.sumOf { it.duration } / 60} min",
+                    text = "Duration: ${routine.formattedTotalDuration}",
                     fontSize = 14.sp,
                     fontFamily = montserratFont,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "${routine.stepCount} steps • ${routine.difficulty.name.lowercase().capitalizeFirst()}",
+                    fontSize = 12.sp,
+                    fontFamily = montserratFont,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (routine.description.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = routine.description,
+                        fontSize = 12.sp,
+                        fontFamily = montserratFont,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2
+                    )
+                }
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

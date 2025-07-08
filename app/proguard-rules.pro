@@ -19,3 +19,44 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep Compose-related classes
+-keep class androidx.compose.** { *; }
+-keepclassmembers class androidx.compose.** { *; }
+
+# Keep Kotlin coroutines
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+# Keep ViewModels
+-keepclassmembers class * extends androidx.lifecycle.ViewModel {
+    <init>(...);
+}
+-keepclassmembers class * extends androidx.lifecycle.AndroidViewModel {
+    <init>(android.app.Application);
+}
+
+# Keep data classes
+-keepclassmembers class * {
+    @androidx.annotation.Keep *;
+}
+
+# Keep TextToSpeech
+-keep class android.speech.tts.** { *; }
+
+# Keep navigation
+-keep class androidx.navigation.** { *; }
+
+# Keep Material3 components
+-keep class androidx.compose.material3.** { *; }
+
+# Optimize
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
+-optimizationpasses 5
+-allowaccessmodification
+
+# Remove logging in release
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}
