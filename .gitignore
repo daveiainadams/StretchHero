@@ -13,3 +13,27 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Security: Prevent log files and sensitive data
+*.logcat
+*.log
+app/release/
+release/
+
+# IDE files that may contain sensitive info
+/.idea/
+
+# OS generated files
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
