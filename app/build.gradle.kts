@@ -75,11 +75,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts")
     implementation("androidx.compose.material:material-icons-extended")
     
-    // Navigation - Updated version
-    implementation("androidx.navigation:navigation-compose:2.7.5")
+    // Navigation - Corrected version
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     
-    // ViewModel - Updated version
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.5")
+    // ViewModel - Corrected version (2.7.0 is the actual latest stable version)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     
     // Google Play Services
     implementation(libs.google.play.services.base)
@@ -97,7 +97,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
     
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
