@@ -11,6 +11,10 @@ A modern Android app built with Jetpack Compose that helps users perform guided 
 - **Multiple Difficulty Levels**: Routines categorized by difficulty (Beginner, Intermediate, Advanced)
 - **Modern UI**: Built with Material Design 3 and Jetpack Compose
 
+## CI/CD Status
+
+[![Android CI](https://github.com/daveiainadams/StretchHero/workflows/Android%20CI/badge.svg)](https://github.com/daveiainadams/StretchHero/actions)
+
 ## Recent Improvements
 
 ### Performance Optimizations
@@ -138,4 +142,4 @@ app/src/main/java/com/dejvik/stretchhero/
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
