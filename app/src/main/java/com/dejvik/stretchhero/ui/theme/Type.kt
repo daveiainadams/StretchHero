@@ -4,6 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 // Use a modern sans-serif font family
 val montserratFont = FontFamily.SansSerif
@@ -12,106 +13,106 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(57),
-        lineHeight = androidx.compose.ui.unit.sp(64),
-        letterSpacing = androidx.compose.ui.unit.sp(-0.25)
+        fontSize = 57.sp,
+        lineHeight = 64.sp,
+        letterSpacing = (-0.25).sp
     ),
     displayMedium = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(45),
-        lineHeight = androidx.compose.ui.unit.sp(52),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 45.sp,
+        lineHeight = 52.sp,
+        letterSpacing = 0.sp
     ),
     displaySmall = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(36),
-        lineHeight = androidx.compose.ui.unit.sp(44),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.sp
     ),
     headlineLarge = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = androidx.compose.ui.unit.sp(32),
-        lineHeight = androidx.compose.ui.unit.sp(40),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 32.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.sp
     ),
     headlineMedium = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = androidx.compose.ui.unit.sp(28),
-        lineHeight = androidx.compose.ui.unit.sp(36),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp
     ),
     headlineSmall = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = androidx.compose.ui.unit.sp(24),
-        lineHeight = androidx.compose.ui.unit.sp(32),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp
     ),
     titleLarge = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = androidx.compose.ui.unit.sp(22),
-        lineHeight = androidx.compose.ui.unit.sp(28),
-        letterSpacing = androidx.compose.ui.unit.sp(0)
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
     ),
     titleMedium = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.SemiBold,
-        fontSize = androidx.compose.ui.unit.sp(16),
-        lineHeight = androidx.compose.ui.unit.sp(24),
-        letterSpacing = androidx.compose.ui.unit.sp(0.15)
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
     ),
     titleSmall = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Bold,
-        fontSize = androidx.compose.ui.unit.sp(14),
-        lineHeight = androidx.compose.ui.unit.sp(20),
-        letterSpacing = androidx.compose.ui.unit.sp(0.1)
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(16),
-        lineHeight = androidx.compose.ui.unit.sp(24),
-        letterSpacing = androidx.compose.ui.unit.sp(0.5)
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(14),
-        lineHeight = androidx.compose.ui.unit.sp(20),
-        letterSpacing = androidx.compose.ui.unit.sp(0.25)
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.25.sp
     ),
     bodySmall = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Normal,
-        fontSize = androidx.compose.ui.unit.sp(12),
-        lineHeight = androidx.compose.ui.unit.sp(16),
-        letterSpacing = androidx.compose.ui.unit.sp(0.4)
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4.sp
     ),
     labelLarge = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Medium,
-        fontSize = androidx.compose.ui.unit.sp(14),
-        lineHeight = androidx.compose.ui.unit.sp(20),
-        letterSpacing = androidx.compose.ui.unit.sp(0.1)
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
     ),
     labelMedium = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Medium,
-        fontSize = androidx.compose.ui.unit.sp(12),
-        lineHeight = androidx.compose.ui.unit.sp(16),
-        letterSpacing = androidx.compose.ui.unit.sp(0.5)
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Medium,
-        fontSize = androidx.compose.ui.unit.sp(11),
-        lineHeight = androidx.compose.ui.unit.sp(16),
-        letterSpacing = androidx.compose.ui.unit.sp(0.5)
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     )
 )
