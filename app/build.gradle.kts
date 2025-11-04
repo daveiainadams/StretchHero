@@ -29,14 +29,12 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Enable R8 full mode for better optimization
-            isDebuggable = false
-            isMinifyEnabled = true
-            isShrinkResources = true
         }
         debug {
             isDebuggable = true

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dejvik.stretchhero.data.Routine
 import com.dejvik.stretchhero.data.RoutineDataSource
+import com.dejvik.stretchhero.data.RoutineError
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ data class RoutineUiState(
     val routineComplete: Boolean = false,
     val routineFound: Boolean = true,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: RoutineError? = null
 )
 
 class RoutineViewModel : ViewModel() {
@@ -52,13 +53,13 @@ class RoutineViewModel : ViewModel() {
                 } else {
                     _uiState.value = RoutineUiState(
                         routineFound = false,
-                        error = "Routine not found",
+                        error = RoutineError.RoutineNotFound,
                         isLoading = false
                     )
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
-                    error = "Failed to load routine: ${e.message}",
+                    error = RoutineError.UnknownError(e.message ?: "Unknown error occurred"),
                     isLoading = false
                 )
             }
@@ -98,29 +99,46 @@ class RoutineViewModel : ViewModel() {
 
     fun moveToNextStep() {
         val currentState = _uiState.value
+
+        // Stop timer if running before moving to next step
+        if (currentState.timerRunning) {
+            stopTimer()
+        }
+
         currentState.currentRoutine?.let { routine ->
             if (currentState.currentStepIndex < routine.steps.size - 1) {
                 val nextIndex = currentState.currentStepIndex + 1
                 val nextStep = routine.steps[nextIndex]
                 _uiState.value = currentState.copy(
                     currentStepIndex = nextIndex,
-                    timeLeftInSeconds = nextStep.duration
+                    timeLeftInSeconds = nextStep.duration,
+                    timerRunning = false
                 )
             } else {
-                _uiState.value = currentState.copy(routineComplete = true)
+                _uiState.value = currentState.copy(
+                    routineComplete = true,
+                    timerRunning = false
+                )
             }
         }
     }
 
     fun moveToPreviousStep() {
         val currentState = _uiState.value
+
+        // Stop timer if running before moving to previous step
+        if (currentState.timerRunning) {
+            stopTimer()
+        }
+
         currentState.currentRoutine?.let { routine ->
             if (currentState.currentStepIndex > 0) {
                 val prevIndex = currentState.currentStepIndex - 1
                 val prevStep = routine.steps[prevIndex]
                 _uiState.value = currentState.copy(
                     currentStepIndex = prevIndex,
-                    timeLeftInSeconds = prevStep.duration
+                    timeLeftInSeconds = prevStep.duration,
+                    timerRunning = false
                 )
             }
         }
