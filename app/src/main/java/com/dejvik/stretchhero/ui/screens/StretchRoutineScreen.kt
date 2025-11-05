@@ -155,7 +155,7 @@ fun StretchRoutineScreen(
                             color = MaterialTheme.colorScheme.error
                         )
                         Text(
-                            text = error,
+                            text = error.toUserMessage(),
                             fontSize = 16.sp,
                             fontFamily = montserratFont,
                             color = MaterialTheme.colorScheme.onBackground,
