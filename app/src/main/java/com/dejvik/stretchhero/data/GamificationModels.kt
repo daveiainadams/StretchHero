@@ -27,29 +27,29 @@ object AchievementData {
     val allAchievements = listOf(
         Achievement(
             id = "first_step",
-            title = "First Step",
-            description = "Complete your first routine",
+            title = "First Steps of the Journey",
+            description = "Complete your first quest",
             icon = Icons.Filled.Star,
             condition = { it.totalRoutinesCompleted >= 1 }
         ),
         Achievement(
             id = "consistency_king",
-            title = "Consistency King",
-            description = "Reach a 3-day streak",
+            title = "Keeper of the Flame",
+            description = "Maintain a 3-day streak",
             icon = Icons.Filled.LocalFireDepartment,
             condition = { it.currentStreak >= 3 }
         ),
         Achievement(
             id = "stretch_master",
-            title = "Stretch Master",
-            description = "Complete 10 routines",
+            title = "Master of Flexibility",
+            description = "Complete 10 quests",
             icon = Icons.Filled.EmojiEvents,
             condition = { it.totalRoutinesCompleted >= 10 }
         ),
         Achievement(
             id = "dedicated_yogi",
-            title = "Dedicated Yogi",
-            description = "Reach a 7-day streak",
+            title = "Legendary Warrior",
+            description = "Maintain a 7-day streak",
             icon = Icons.Filled.FitnessCenter,
             condition = { it.currentStreak >= 7 }
         )

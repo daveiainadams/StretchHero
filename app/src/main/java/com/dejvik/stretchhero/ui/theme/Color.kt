@@ -2,20 +2,31 @@ package com.dejvik.stretchhero.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PrimaryIndigo = Color(0xFF4A148C)
-val SecondaryTeal = Color(0xFF00BFA5)
-val TertiaryCoral = Color(0xFFFF6E40)
+// Fantasy/Fireside Theme - "Ember & Steel"
+val EmberOrange = Color(0xFFFF6B35)
+val DeepCharcoal = Color(0xFF2D3142)
+val GoldAccent = Color(0xFFF4A261)
 
-val BackgroundLight = Color(0xFFF5F5F5)
+val ForestGreen = Color(0xFF2A9D8F)
+val SteelBlue = Color(0xFF457B9D)
+val WarmCream = Color(0xFFF8F4E3)
+
+// Backgrounds
+val BackgroundDark = Color(0xFF1A1D2E) // Darker than charcoal for depth
+val SurfaceDark = DeepCharcoal
+
+val BackgroundLight = WarmCream
 val SurfaceLight = Color(0xFFFFFFFF)
 
-val BackgroundDark = Color(0xFF121212)
-val SurfaceDark = Color(0xFF1E1E1E)
+// Legacy compatibility (will be replaced)
+val PrimaryIndigo = EmberOrange
+val SecondaryTeal = ForestGreen
+val TertiaryCoral = GoldAccent
 
-val Purple80 = PrimaryIndigo // Keeping for compatibility if needed, but should replace usage
-val PurpleGrey80 = SecondaryTeal
-val Pink80 = TertiaryCoral
+val Purple80 = EmberOrange
+val PurpleGrey80 = ForestGreen
+val Pink80 = GoldAccent
 
-val Purple40 = PrimaryIndigo
-val PurpleGrey40 = SecondaryTeal
-val Pink40 = TertiaryCoral
+val Purple40 = EmberOrange
+val PurpleGrey40 = ForestGreen
+val Pink40 = GoldAccent

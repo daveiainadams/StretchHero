@@ -54,12 +54,13 @@ fun StretchLibraryScreen(navController: NavController) {
             .padding(16.dp)
     ) {
         Text(
-            text = "Stretch Routines",
+            text = "AVAILABLE QUESTS",
             style = MaterialTheme.typography.headlineLarge,
             fontFamily = montserratFont,
             fontWeight = FontWeight.Bold,
+            letterSpacing = 1.5.sp,
             modifier = Modifier.padding(bottom = 24.dp, top = 8.dp),
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.tertiary
         )
         
         if (routines.isEmpty()) {

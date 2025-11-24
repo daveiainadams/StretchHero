@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.dejvik.stretchhero.ui.theme.montserratFont
+import com.dejvik.stretchhero.ui.theme.ralewayFont
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,8 +42,9 @@ fun HomeScreen(navController: NavController) {
             .background(
                 brush = androidx.compose.ui.graphics.Brush.verticalGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.background
+                        Color(0xFF1A1D2E), // Deep night sky
+                        Color(0xFF2D3142), // Charcoal
+                        Color(0xFF3D2817)  // Warm ember glow at bottom
                     )
                 )
             )
@@ -72,18 +74,19 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
             
             Text(
-                text = "Stretch Hero",
+                text = "STRETCH HERO",
                 style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.tertiary,
                 fontFamily = montserratFont,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 2.sp
             )
             
             Text(
-                text = "Your daily flexibility companion",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                fontFamily = montserratFont,
+                text = "Forge Your Flexibility",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
+                fontFamily = ralewayFont,
                 modifier = Modifier.padding(top = 8.dp)
             )
             
@@ -103,10 +106,11 @@ fun HomeScreen(navController: NavController) {
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
             ) {
                 Text(
-                    "Start Stretching", 
+                    "BEGIN QUEST", 
                     fontFamily = montserratFont,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.5.sp
                 )
             }
             
@@ -125,10 +129,11 @@ fun HomeScreen(navController: NavController) {
                 border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f))
             ) {
                 Text(
-                    "Your Progress", 
+                    "HERO STATS", 
                     fontFamily = montserratFont,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.5.sp
                 )
             }
         }

@@ -14,29 +14,37 @@ import androidx.compose.ui.platform.LocalContext
 
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryIndigo,
-    secondary = SecondaryTeal,
-    tertiary = TertiaryCoral,
+    primary = EmberOrange,
+    secondary = ForestGreen,
+    tertiary = GoldAccent,
     background = BackgroundDark,
     surface = SurfaceDark,
     onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
-    onBackground = Color.White,
-    onSurface = Color.White
+    onSecondary = Color.White,
+    onTertiary = DeepCharcoal,
+    onBackground = WarmCream,
+    onSurface = WarmCream,
+    primaryContainer = DeepCharcoal,
+    onPrimaryContainer = GoldAccent,
+    secondaryContainer = ForestGreen.copy(alpha = 0.3f),
+    onSecondaryContainer = WarmCream
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryIndigo,
-    secondary = SecondaryTeal,
-    tertiary = TertiaryCoral,
+    primary = EmberOrange,
+    secondary = ForestGreen,
+    tertiary = GoldAccent,
     background = BackgroundLight,
     surface = SurfaceLight,
     onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black
+    onSecondary = Color.White,
+    onTertiary = DeepCharcoal,
+    onBackground = DeepCharcoal,
+    onSurface = DeepCharcoal,
+    primaryContainer = WarmCream,
+    onPrimaryContainer = EmberOrange,
+    secondaryContainer = ForestGreen.copy(alpha = 0.2f),
+    onSecondaryContainer = DeepCharcoal
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -51,9 +59,9 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun StretchHeroTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true, // Changed default to dark theme for fireside aesthetic
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Disabled to maintain fantasy theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

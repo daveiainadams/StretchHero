@@ -42,9 +42,10 @@ fun AchievementsScreen(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        "Your Progress",
+                        "HERO STATS",
                         fontFamily = montserratFont,
                         fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.5.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },

@@ -1,9 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="128dp"
-    android:height="128dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Shield Base -->
     <path
-        android:fillColor="#FF9800"
-        android:pathData="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.46,13.97L5.82,21L12,17.27z"/>
+        android:fillColor="#2D3142"
+        android:pathData="M100,20 L160,40 L160,120 Q160,160 100,180 Q40,160 40,120 L40,40 Z"/>
+    
+    <!-- Shield Border/Highlight -->
+    <path
+        android:strokeColor="#F4A261"
+        android:strokeWidth="3"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M100,20 L160,40 L160,120 Q160,160 100,180 Q40,160 40,120 L40,40 Z"/>
+    
+    <!-- Flame Base (Ember Orange) -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M100,140 Q90,120 95,100 Q98,85 100,70 Q102,85 105,100 Q110,120 100,140 Z"/>
+    
+    <!-- Flame Highlight (Gold) -->
+    <path
+        android:fillColor="#F4A261"
+        android:pathData="M100,130 Q95,115 97,100 Q99,90 100,80 Q101,90 103,100 Q105,115 100,130 Z"/>
+    
+    <!-- Inner Flame Core (Bright) -->
+    <path
+        android:fillColor="#FFE5B4"
+        android:pathData="M100,120 Q97,110 98,100 Q99,95 100,90 Q101,95 102,100 Q103,110 100,120 Z"/>
+    
+    <!-- Stretching Figure Silhouette (integrated into flame) -->
+    <path
+        android:fillColor="#2D3142"
+        android:fillAlpha="0.6"
+        android:pathData="M100,75 Q95,80 92,90 L95,95 Q97,92 100,90 Q103,92 105,95 L108,90 Q105,80 100,75 Z
+                         M100,95 L100,110 M95,100 L105,100 M97,110 L100,120 M103,110 L100,120"/>
+    
+    <!-- Decorative Shield Details -->
+    <path
+        android:strokeColor="#F4A261"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M50,50 L150,50 M50,60 L150,60"/>
+    
+    <!-- Glow Effect (outer) -->
+    <path
+        android:fillColor="#FF6B35"
+        android:fillAlpha="0.2"
+        android:pathData="M100,140 Q85,115 90,95 Q95,75 100,60 Q105,75 110,95 Q115,115 100,140 Z"/>
+    
 </vector>
