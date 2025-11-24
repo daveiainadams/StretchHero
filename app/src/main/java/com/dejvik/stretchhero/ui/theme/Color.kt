@@ -2,13 +2,20 @@ package com.dejvik.stretchhero.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-val DarkGray = Color(0xFF2C2C2C)
-val DeepRed = Color(0xFFD72638)
-val MutedRed = Color(0xFF5F3539)
-val SoftWhite = Color(0xFFFDFDFD)
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val PrimaryIndigo = Color(0xFF4A148C)
+val SecondaryTeal = Color(0xFF00BFA5)
+val TertiaryCoral = Color(0xFFFF6E40)
+
+val BackgroundLight = Color(0xFFF5F5F5)
+val SurfaceLight = Color(0xFFFFFFFF)
+
+val BackgroundDark = Color(0xFF121212)
+val SurfaceDark = Color(0xFF1E1E1E)
+
+val Purple80 = PrimaryIndigo // Keeping for compatibility if needed, but should replace usage
+val PurpleGrey80 = SecondaryTeal
+val Pink80 = TertiaryCoral
+
+val Purple40 = PrimaryIndigo
+val PurpleGrey40 = SecondaryTeal
+val Pink40 = TertiaryCoral

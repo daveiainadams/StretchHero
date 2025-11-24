@@ -79,6 +79,9 @@ dependencies {
     // ViewModel - Corrected version (2.7.0 is the actual latest stable version)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    
     // Google Play Services
     implementation(libs.google.play.services.base)
     

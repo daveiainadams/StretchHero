@@ -55,10 +55,10 @@ fun StretchLibraryScreen(navController: NavController) {
     ) {
         Text(
             text = "Stretch Routines",
-            fontSize = 28.sp,
+            style = MaterialTheme.typography.headlineLarge,
             fontFamily = montserratFont,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp),
+            modifier = Modifier.padding(bottom = 24.dp, top = 8.dp),
             color = MaterialTheme.colorScheme.onBackground
         )
         
@@ -69,7 +69,7 @@ fun StretchLibraryScreen(navController: NavController) {
             ) {
                 Text(
                     text = "No routines available",
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                     fontFamily = montserratFont,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -97,53 +97,76 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             .clickable {
                 navController.navigate(Screen.RoutineDetail.createRoute(routine.id))
             }
-            .clip(RoundedCornerShape(12.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(16.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = imageResId),
-                contentDescription = routine.name,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                modifier = Modifier.size(80.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Image(
+                        painter = painterResource(id = imageResId),
+                        contentDescription = routine.name,
+                        modifier = Modifier
+                            .size(48.dp),
+                        contentScale = ContentScale.Fit,
+                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
+                    )
+                }
+            }
+            
             Spacer(modifier = Modifier.width(16.dp))
+            
             Column {
                 Text(
                     text = routine.name,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     fontFamily = montserratFont,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Duration: ${routine.formattedTotalDuration}",
-                    fontSize = 14.sp,
-                    fontFamily = montserratFont,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "${routine.stepCount} steps • ${routine.difficulty.name.lowercase().capitalizeFirst()}",
-                    fontSize = 12.sp,
-                    fontFamily = montserratFont,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (routine.description.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(4.dp))
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = routine.description,
-                        fontSize = 12.sp,
+                        text = "${routine.formattedTotalDuration} • ${routine.stepCount} steps",
+                        style = MaterialTheme.typography.bodyMedium,
                         fontFamily = montserratFont,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Difficulty Badge
+                Surface(
+                    color = when(routine.difficulty) {
+                        com.dejvik.stretchhero.data.Difficulty.BEGINNER -> MaterialTheme.colorScheme.secondaryContainer
+                        com.dejvik.stretchhero.data.Difficulty.INTERMEDIATE -> MaterialTheme.colorScheme.tertiaryContainer
+                        com.dejvik.stretchhero.data.Difficulty.ADVANCED -> MaterialTheme.colorScheme.errorContainer
+                    },
+                    shape = RoundedCornerShape(4.dp)
+                ) {
+                    Text(
+                        text = routine.difficulty.name.lowercase().capitalizeFirst(),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontFamily = montserratFont,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        color = when(routine.difficulty) {
+                            com.dejvik.stretchhero.data.Difficulty.BEGINNER -> MaterialTheme.colorScheme.onSecondaryContainer
+                            com.dejvik.stretchhero.data.Difficulty.INTERMEDIATE -> MaterialTheme.colorScheme.onTertiaryContainer
+                            com.dejvik.stretchhero.data.Difficulty.ADVANCED -> MaterialTheme.colorScheme.onErrorContainer
+                        }
                     )
                 }
             }

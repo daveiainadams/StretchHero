@@ -1,18 +1,22 @@
 package com.dejvik.stretchhero.ui.screens
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.dejvik.stretchhero.data.AchievementData
 import com.dejvik.stretchhero.data.Routine
 import com.dejvik.stretchhero.data.RoutineDataSource
 import com.dejvik.stretchhero.data.RoutineError
+import com.dejvik.stretchhero.data.UserPreferencesRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 data class RoutineUiState(
     val currentRoutine: Routine? = null,
@@ -25,43 +29,50 @@ data class RoutineUiState(
     val error: RoutineError? = null
 )
 
-class RoutineViewModel : ViewModel() {
+class RoutineViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(RoutineUiState())
     val uiState: StateFlow<RoutineUiState> = _uiState.asStateFlow()
-    
+
+    private val repository = UserPreferencesRepository(application)
     private var timerJob: Job? = null
 
-    fun loadRoutine(routineId: String) {
+    init {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            
-            try {
-                timerJob?.cancel()
-                timerJob = null
-                
-                val routine = RoutineDataSource.getRoutineById(routineId)
-                if (routine != null) {
-                    _uiState.value = RoutineUiState(
-                        currentRoutine = routine,
+            repository.userProgress.collect { progress ->
+                // You could expose progress in UI state if needed, 
+                // but for now we just need it for logic updates
+            }
+        }
+    }
+
+    fun loadRoutine(routineId: String) {
+        _uiState.update { it.copy(isLoading = true, error = null) }
+        viewModelScope.launch {
+            timerJob?.cancel()
+            timerJob = null
+            // Simulate network delay if needed, but for local data it's fast
+            delay(500) 
+            val routine = RoutineDataSource.getRoutineById(routineId)
+            if (routine != null) {
+                _uiState.update { 
+                    it.copy(
+                        currentRoutine = routine, 
                         currentStepIndex = 0,
                         timeLeftInSeconds = routine.steps.firstOrNull()?.duration ?: 0,
-                        timerRunning = false,
-                        routineComplete = false,
                         routineFound = true,
-                        isLoading = false
-                    )
-                } else {
-                    _uiState.value = RoutineUiState(
-                        routineFound = false,
+                        isLoading = false,
+                        routineComplete = false,
+                        timerRunning = false
+                    ) 
+                }
+            } else {
+                _uiState.update { 
+                    it.copy(
+                        routineFound = false, 
                         error = RoutineError.RoutineNotFound,
                         isLoading = false
-                    )
+                    ) 
                 }
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    error = RoutineError.UnknownError(e.message ?: "Unknown error occurred"),
-                    isLoading = false
-                )
             }
         }
     }
@@ -69,77 +80,120 @@ class RoutineViewModel : ViewModel() {
     fun startStepTimer() {
         val currentState = _uiState.value
         if (currentState.timerRunning || currentState.routineComplete) return
-        
+
         val currentStep = currentState.currentRoutine?.steps?.getOrNull(currentState.currentStepIndex)
         if (currentStep != null) {
             val initialTime = if (currentState.timeLeftInSeconds == 0) currentStep.duration else currentState.timeLeftInSeconds
-            
-            _uiState.value = currentState.copy(
-                timeLeftInSeconds = initialTime,
-                timerRunning = true
-            )
+
+            _uiState.update { it.copy(timeLeftInSeconds = initialTime, timerRunning = true) }
             
             timerJob = viewModelScope.launch {
                 while (_uiState.value.timeLeftInSeconds > 0 && _uiState.value.timerRunning) {
-                    delay(1000L)
+                    delay(1000)
                     if (_uiState.value.timerRunning) {
-                        _uiState.value = _uiState.value.copy(
-                            timeLeftInSeconds = _uiState.value.timeLeftInSeconds - 1
-                        )
+                        _uiState.update { it.copy(timeLeftInSeconds = it.timeLeftInSeconds - 1) }
                     }
                 }
-                
+                // Timer finished naturally
                 if (_uiState.value.timerRunning) {
-                    _uiState.value = _uiState.value.copy(timerRunning = false)
+                    _uiState.update { it.copy(timerRunning = false) }
                     moveToNextStep()
                 }
             }
         }
     }
 
+    fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
+        _uiState.update { it.copy(timerRunning = false) }
+    }
+
+    fun pauseTimer() {
+        stopTimer()
+    }
+
+    fun resumeTimer() {
+        startStepTimer()
+    }
+
     fun moveToNextStep() {
         val currentState = _uiState.value
-
-        // Stop timer if running before moving to next step
-        if (currentState.timerRunning) {
-            stopTimer()
-        }
-
-        currentState.currentRoutine?.let { routine ->
-            if (currentState.currentStepIndex < routine.steps.size - 1) {
-                val nextIndex = currentState.currentStepIndex + 1
-                val nextStep = routine.steps[nextIndex]
-                _uiState.value = currentState.copy(
+        val currentRoutine = currentState.currentRoutine ?: return
+        
+        if (currentState.currentStepIndex < currentRoutine.steps.size - 1) {
+            val nextIndex = currentState.currentStepIndex + 1
+            val nextStep = currentRoutine.steps[nextIndex]
+            _uiState.update { 
+                it.copy(
                     currentStepIndex = nextIndex,
                     timeLeftInSeconds = nextStep.duration,
                     timerRunning = false
-                )
-            } else {
-                _uiState.value = currentState.copy(
-                    routineComplete = true,
-                    timerRunning = false
-                )
+                ) 
             }
+            // Optional: Auto-start next step
+            // startStepTimer()
+        } else {
+            // Routine Complete
+            finishRoutine()
         }
     }
 
     fun moveToPreviousStep() {
         val currentState = _uiState.value
+        val currentRoutine = currentState.currentRoutine ?: return
 
-        // Stop timer if running before moving to previous step
-        if (currentState.timerRunning) {
+        if (currentState.currentStepIndex > 0) {
+            val prevIndex = currentState.currentStepIndex - 1
+            val prevStep = currentRoutine.steps[prevIndex]
             stopTimer()
-        }
-
-        currentState.currentRoutine?.let { routine ->
-            if (currentState.currentStepIndex > 0) {
-                val prevIndex = currentState.currentStepIndex - 1
-                val prevStep = routine.steps[prevIndex]
-                _uiState.value = currentState.copy(
+            _uiState.update { 
+                it.copy(
                     currentStepIndex = prevIndex,
                     timeLeftInSeconds = prevStep.duration,
                     timerRunning = false
-                )
+                ) 
+            }
+        }
+    }
+
+    private fun finishRoutine() {
+        stopTimer()
+        _uiState.update { it.copy(routineComplete = true) }
+        updateUserProgress()
+    }
+
+    private fun updateUserProgress() {
+        viewModelScope.launch {
+            val currentProgress = repository.userProgress.first()
+            val today = LocalDate.now().toString()
+            
+            // Update Streak
+            val lastDate = currentProgress.lastWorkoutDate
+            val newStreak = if (lastDate == LocalDate.now().minusDays(1).toString()) {
+                currentProgress.currentStreak + 1
+            } else if (lastDate == today) {
+                currentProgress.currentStreak // Already worked out today
+            } else {
+                1 // Reset streak
+            }
+
+            // Update stats
+            val updatedProgress = currentProgress.copy(
+                totalRoutinesCompleted = currentProgress.totalRoutinesCompleted + 1,
+                currentStreak = newStreak,
+                lastWorkoutDate = today
+            )
+            repository.updateProgress(updatedProgress)
+
+            // Check Achievements
+            AchievementData.allAchievements.forEach { achievement ->
+                if (!updatedProgress.unlockedAchievements.contains(achievement.id)) {
+                    if (achievement.condition(updatedProgress)) {
+                        repository.unlockAchievement(achievement.id)
+                        // Could trigger a UI event for "Achievement Unlocked!"
+                    }
+                }
             }
         }
     }
@@ -151,27 +205,12 @@ class RoutineViewModel : ViewModel() {
         }
     }
 
-    fun stopTimer() {
-        timerJob?.cancel()
-        timerJob = null
-        _uiState.value = _uiState.value.copy(timerRunning = false)
-    }
-
-    fun pauseTimer() {
-        stopTimer()
-    }
-
-    fun resumeTimer() {
-        startStepTimer()
-    }
-
     fun clearError() {
-        _uiState.value = _uiState.value.copy(error = null)
+        _uiState.update { it.copy(error = null) }
     }
-
+    
     override fun onCleared() {
         super.onCleared()
         timerJob?.cancel()
-        timerJob = null
     }
 }

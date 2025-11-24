@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.dejvik.stretchhero.ui.screens.HomeScreen // Added import
 import com.dejvik.stretchhero.ui.screens.StretchLibraryScreen
 import com.dejvik.stretchhero.ui.screens.StretchRoutineScreen
+import com.dejvik.stretchhero.ui.screens.AchievementsScreen
 import androidx.compose.material3.MaterialTheme
 
 @Composable
@@ -31,6 +32,9 @@ fun StretchHeroNavHost() {
             }
             composable(Screen.StretchLibrary.route) {
                 StretchLibraryScreen(navController)
+            }
+            composable(Screen.Achievements.route) {
+                AchievementsScreen(navController)
             }
             composable(
                 route = Screen.RoutineDetail.route,
