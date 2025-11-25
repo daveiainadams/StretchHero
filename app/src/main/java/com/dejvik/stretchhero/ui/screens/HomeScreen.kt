@@ -57,18 +57,22 @@ fun HomeScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
-                shape = androidx.compose.foundation.shape.CircleShape,
+                modifier = Modifier
+                    .size(120.dp),
+                shape = CircleShape,
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                modifier = Modifier.size(160.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
-                Image(
-                    painter = painterResource(id = com.dejvik.stretchhero.R.drawable.stretchhero_logo),
-                    contentDescription = "App Logo",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    contentScale = ContentScale.Fit
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = com.dejvik.stretchhero.R.drawable.stretch_hero_logo),
+                        contentDescription = "Stretch Hero Logo",
+                        modifier = Modifier.size(100.dp)
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(32.dp))
