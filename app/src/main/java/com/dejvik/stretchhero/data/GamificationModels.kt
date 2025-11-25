@@ -12,7 +12,8 @@ data class UserProgress(
     val totalRoutinesCompleted: Int = 0,
     val currentStreak: Int = 0,
     val lastWorkoutDate: String? = null, // ISO-8601 format: YYYY-MM-DD
-    val unlockedAchievements: List<String> = emptyList()
+    val unlockedAchievements: List<String> = emptyList(),
+    val completedChallenges: List<String> = emptyList()
 )
 
 data class Achievement(

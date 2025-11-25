@@ -27,6 +27,8 @@ import com.dejvik.stretchhero.navigation.Screen
 import com.dejvik.stretchhero.utils.TextToSpeechHelper
 import com.dejvik.stretchhero.utils.getDrawableResourceId
 import com.dejvik.stretchhero.ui.theme.montserratFont
+import com.dejvik.stretchhero.ui.components.RoutineCompletionDialog
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,10 +78,20 @@ fun StretchRoutineScreen(
         }
     }
     
+    // Completion dialog state
+    var showCompletionDialog by remember { mutableStateOf(false) }
+    var milestoneChallenge by remember { mutableStateOf<com.dejvik.stretchhero.data.MilestoneChallenge?>(null) }
+    
+    // Check for milestone challenge when routine completes
     LaunchedEffect(routineComplete) {
         if (routineComplete) {
-            ttsHelper.speak("Routine complete. Well done!")
-            navController.popBackStack()
+            ttsHelper.speak("Quest complete! Well done!")
+            val progress = viewModel.getUserProgress()
+            milestoneChallenge = com.dejvik.stretchhero.data.MilestoneChallengeData.getNextChallenge(
+                progress.totalRoutinesCompleted,
+                progress.completedChallenges
+            )
+            showCompletionDialog = true
         }
     }
 
@@ -379,5 +391,27 @@ fun StretchRoutineScreen(
                 }
             }
         }
+    }
+    
+    // Completion Dialog
+    if (showCompletionDialog && currentRoutine != null) {
+        val scope = rememberCoroutineScope()
+        RoutineCompletionDialog(
+            routineName = currentRoutine.name,
+            newlyUnlockedAchievements = uiState.newlyUnlockedAchievements,
+            milestoneChallenge = milestoneChallenge,
+            onDismiss = {
+                showCompletionDialog = false
+                navController.popBackStack()
+            },
+            onChallengeAccepted = {
+                scope.launch {
+                    milestoneChallenge?.let { viewModel.completeChallenge(it.id) }
+                }
+            },
+            onChallengeDeclined = {
+                // Just close, don't mark as complete
+            }
+        )
     }
 }

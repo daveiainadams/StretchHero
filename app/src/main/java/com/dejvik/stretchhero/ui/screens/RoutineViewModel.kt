@@ -26,7 +26,8 @@ data class RoutineUiState(
     val routineComplete: Boolean = false,
     val routineFound: Boolean = true,
     val isLoading: Boolean = false,
-    val error: RoutineError? = null
+    val error: RoutineError? = null,
+    val newlyUnlockedAchievements: List<com.dejvik.stretchhero.data.Achievement> = emptyList()
 )
 
 class RoutineViewModel(application: Application) : AndroidViewModel(application) {
@@ -186,15 +187,19 @@ class RoutineViewModel(application: Application) : AndroidViewModel(application)
             )
             repository.updateProgress(updatedProgress)
 
-            // Check Achievements
+            // Check Achievements and track newly unlocked ones
+            val newlyUnlocked = mutableListOf<com.dejvik.stretchhero.data.Achievement>()
             AchievementData.allAchievements.forEach { achievement ->
                 if (!updatedProgress.unlockedAchievements.contains(achievement.id)) {
                     if (achievement.condition(updatedProgress)) {
                         repository.unlockAchievement(achievement.id)
-                        // Could trigger a UI event for "Achievement Unlocked!"
+                        newlyUnlocked.add(achievement)
                     }
                 }
             }
+            
+            // Update UI state with newly unlocked achievements
+            _uiState.update { it.copy(newlyUnlockedAchievements = newlyUnlocked) }
         }
     }
 
@@ -207,6 +212,12 @@ class RoutineViewModel(application: Application) : AndroidViewModel(application)
 
     fun clearError() {
         _uiState.update { it.copy(error = null) }
+    }
+    
+    suspend fun getUserProgress() = repository.userProgress.first()
+    
+    suspend fun completeChallenge(challengeId: String) {
+        repository.completeChallenge(challengeId)
     }
     
     override fun onCleared() {

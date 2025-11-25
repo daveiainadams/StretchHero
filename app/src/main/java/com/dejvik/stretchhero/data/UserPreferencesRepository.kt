@@ -21,6 +21,7 @@ class UserPreferencesRepository(private val context: Context) {
         val CURRENT_STREAK = intPreferencesKey("current_streak")
         val LAST_WORKOUT_DATE = stringPreferencesKey("last_workout_date")
         val UNLOCKED_ACHIEVEMENTS = stringSetPreferencesKey("unlocked_achievements")
+        val COMPLETED_CHALLENGES = stringSetPreferencesKey("completed_challenges")
     }
 
     val userProgress: Flow<UserProgress> = context.dataStore.data
@@ -29,12 +30,14 @@ class UserPreferencesRepository(private val context: Context) {
             val currentStreak = preferences[PreferencesKeys.CURRENT_STREAK] ?: 0
             val lastWorkoutDate = preferences[PreferencesKeys.LAST_WORKOUT_DATE]
             val unlockedAchievements = preferences[PreferencesKeys.UNLOCKED_ACHIEVEMENTS] ?: emptySet()
+            val completedChallenges = preferences[PreferencesKeys.COMPLETED_CHALLENGES] ?: emptySet()
 
             UserProgress(
                 totalRoutinesCompleted = totalRoutines,
                 currentStreak = currentStreak,
                 lastWorkoutDate = lastWorkoutDate,
-                unlockedAchievements = unlockedAchievements.toList()
+                unlockedAchievements = unlockedAchievements.toList(),
+                completedChallenges = completedChallenges.toList()
             )
         }
 
@@ -44,6 +47,7 @@ class UserPreferencesRepository(private val context: Context) {
             preferences[PreferencesKeys.CURRENT_STREAK] = progress.currentStreak
             progress.lastWorkoutDate?.let { preferences[PreferencesKeys.LAST_WORKOUT_DATE] = it }
             preferences[PreferencesKeys.UNLOCKED_ACHIEVEMENTS] = progress.unlockedAchievements.toSet()
+            preferences[PreferencesKeys.COMPLETED_CHALLENGES] = progress.completedChallenges.toSet()
         }
     }
 
@@ -65,6 +69,13 @@ class UserPreferencesRepository(private val context: Context) {
         context.dataStore.edit { preferences ->
             val current = preferences[PreferencesKeys.UNLOCKED_ACHIEVEMENTS] ?: emptySet()
             preferences[PreferencesKeys.UNLOCKED_ACHIEVEMENTS] = current + achievementId
+        }
+    }
+    
+    suspend fun completeChallenge(challengeId: String) {
+        context.dataStore.edit { preferences ->
+            val current = preferences[PreferencesKeys.COMPLETED_CHALLENGES] ?: emptySet()
+            preferences[PreferencesKeys.COMPLETED_CHALLENGES] = current + challengeId
         }
     }
 }
