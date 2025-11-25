@@ -32,10 +32,17 @@ import com.dejvik.stretchhero.ui.theme.montserratFont
 @Composable
 fun StretchRoutineScreen(
     navController: NavController,
-    routineId: String,
-    viewModel: RoutineViewModel = viewModel()
+    routineId: String
 ) {
     val context = LocalContext.current
+    val viewModel: RoutineViewModel = viewModel(
+        factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return RoutineViewModel(context.applicationContext as android.app.Application) as T
+            }
+        }
+    )
     val ttsHelper = remember { TextToSpeechHelper(context) }
     val uiState by viewModel.uiState.collectAsState()
 
