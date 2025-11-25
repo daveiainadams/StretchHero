@@ -16,22 +16,63 @@ import com.dejvik.stretchhero.ui.screens.HomeScreen // Added import
 import com.dejvik.stretchhero.ui.screens.StretchLibraryScreen
 import com.dejvik.stretchhero.ui.screens.StretchRoutineScreen
 import com.dejvik.stretchhero.ui.screens.AchievementsScreen
+import com.dejvik.stretchhero.ui.screens.OnboardingScreen
+import com.dejvik.stretchhero.ui.screens.SettingsScreen
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import com.dejvik.stretchhero.data.UserPreferencesRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @Composable
 fun StretchHeroNavHost() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val repository = remember { UserPreferencesRepository(context) }
+    val scope = rememberCoroutineScope()
+    
+    // Check if first launch
+    var isFirstLaunch by remember { mutableStateOf<Boolean?>(null) }
+    
+    LaunchedEffect(Unit) {
+        val progress = repository.userProgress.first()
+        // If no routines completed and no achievements, show onboarding
+        isFirstLaunch = progress.totalRoutinesCompleted == 0 && progress.unlockedAchievements.isEmpty()
+    }
+    
+    if (isFirstLaunch == null) {
+        // Loading
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+    
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route, // Changed startDestination
+            startDestination = if (isFirstLaunch == true) Screen.Onboarding.route else Screen.Home.route,
             modifier = Modifier.padding(padding)
         ) {
-            composable(Screen.Home.route) { // Added HomeScreen composable
+            composable(Screen.Onboarding.route) {
+                OnboardingScreen(
+                    navController = navController,
+                    onComplete = {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Onboarding.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable(Screen.Home.route) {
                 HomeScreen(navController)
             }
             composable(Screen.StretchLibrary.route) {
                 StretchLibraryScreen(navController)
+            }
+            composable(Screen.Settings.route) {
+                SettingsScreen(navController)
             }
             composable(Screen.Achievements.route) {
                 AchievementsScreen(navController)

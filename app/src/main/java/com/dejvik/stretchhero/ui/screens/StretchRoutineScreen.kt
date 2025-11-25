@@ -29,6 +29,7 @@ import com.dejvik.stretchhero.utils.getDrawableResourceId
 import com.dejvik.stretchhero.ui.theme.montserratFont
 import com.dejvik.stretchhero.ui.components.RoutineCompletionDialog
 import kotlinx.coroutines.launch
+import androidx.activity.compose.BackHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,6 +101,13 @@ fun StretchRoutineScreen(
             viewModel.stopTimer()
             ttsHelper.shutdown()
         }
+    }
+    
+    // Exit confirmation
+    var showExitDialog by remember { mutableStateOf(false) }
+    
+    BackHandler(enabled = isRunning) {
+        showExitDialog = true
     }
 
     Scaffold(
@@ -411,6 +419,53 @@ fun StretchRoutineScreen(
             },
             onChallengeDeclined = {
                 // Just close, don't mark as complete
+            }
+        )
+    }
+    
+    // Exit Confirmation Dialog
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            icon = {
+                Icon(
+                    Icons.Filled.Warning,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(48.dp)
+                )
+            },
+            title = {
+                Text(
+                    "Abandon Quest?",
+                    fontFamily = montserratFont,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    "Your progress in this routine will be lost. Are you sure you want to leave?",
+                    fontFamily = ralewayFont
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.stopTimer()
+                        showExitDialog = false
+                        navController.popBackStack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("LEAVE", fontFamily = montserratFont, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitDialog = false }) {
+                    Text("CONTINUE", fontFamily = montserratFont, fontWeight = FontWeight.Bold)
+                }
             }
         )
     }
