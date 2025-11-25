@@ -29,6 +29,7 @@ import com.dejvik.stretchhero.data.Achievement
 import com.dejvik.stretchhero.data.AchievementData
 import com.dejvik.stretchhero.data.UserPreferencesRepository
 import com.dejvik.stretchhero.ui.theme.montserratFont
+import com.dejvik.stretchhero.ui.theme.ralewayFont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,14 +78,13 @@ fun AchievementsScreen(navController: NavController) {
                 // Stats Section
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     StatCard(
                         title = "Streak",
                         value = "${userProgress!!.currentStreak} days",
                         modifier = Modifier.weight(1f)
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
                     StatCard(
                         title = "Completed",
                         value = "${userProgress!!.totalRoutinesCompleted}",
@@ -95,11 +95,12 @@ fun AchievementsScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Achievements",
+                    text = "ACHIEVEMENTS",
                     style = MaterialTheme.typography.headlineSmall,
                     fontFamily = montserratFont,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    letterSpacing = 1.5.sp,
+                    color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -123,25 +124,27 @@ fun StatCard(title: String, value: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(20.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = value,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.displaySmall,
                 fontFamily = montserratFont,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
-                fontFamily = montserratFont,
+                style = MaterialTheme.typography.titleMedium,
+                fontFamily = ralewayFont,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -154,8 +157,9 @@ fun AchievementCard(achievement: Achievement, isUnlocked: Boolean) {
         colors = CardDefaults.cardColors(
             containerColor = if (isUnlocked) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
         ),
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.height(180.dp)
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isUnlocked) 6.dp else 2.dp),
+        modifier = Modifier.height(200.dp)
     ) {
         Column(
             modifier = Modifier

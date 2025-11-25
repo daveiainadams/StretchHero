@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.dejvik.stretchhero.ui.theme.montserratFont
+import com.dejvik.stretchhero.ui.theme.ralewayFont
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,52 +98,52 @@ fun RoutineCard(routine: Routine, navController: NavController) {
             .fillMaxWidth()
             .clickable {
                 navController.navigate(Screen.RoutineDetail.createRoute(routine.id))
-            }
-            .clip(RoundedCornerShape(16.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            },
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Card(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                modifier = Modifier.size(80.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                modifier = Modifier.size(90.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     Image(
                         painter = painterResource(id = imageResId),
                         contentDescription = routine.name,
-                        modifier = Modifier
-                            .size(48.dp),
-                        contentScale = ContentScale.Fit,
-                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
+                        modifier = Modifier.size(60.dp),
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
             
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
             
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = routine.name,
                     style = MaterialTheme.typography.titleLarge,
                     fontFamily = montserratFont,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    letterSpacing = 0.5.sp
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "${routine.formattedTotalDuration} • ${routine.stepCount} steps",
                         style = MaterialTheme.typography.bodyMedium,
-                        fontFamily = montserratFont,
+                        fontFamily = ralewayFont,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -156,13 +157,19 @@ fun RoutineCard(routine: Routine, navController: NavController) {
                         com.dejvik.stretchhero.data.Difficulty.INTERMEDIATE -> MaterialTheme.colorScheme.tertiaryContainer
                         com.dejvik.stretchhero.data.Difficulty.ADVANCED -> MaterialTheme.colorScheme.errorContainer
                     },
-                    shape = RoundedCornerShape(4.dp)
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = routine.difficulty.name.lowercase().capitalizeFirst(),
-                        style = MaterialTheme.typography.labelMedium,
+                        text = when(routine.difficulty) {
+                            com.dejvik.stretchhero.data.Difficulty.BEGINNER -> "NOVICE"
+                            com.dejvik.stretchhero.data.Difficulty.INTERMEDIATE -> "WARRIOR"
+                            com.dejvik.stretchhero.data.Difficulty.ADVANCED -> "CHAMPION"
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        style = MaterialTheme.typography.labelSmall,
                         fontFamily = montserratFont,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp,
                         color = when(routine.difficulty) {
                             com.dejvik.stretchhero.data.Difficulty.BEGINNER -> MaterialTheme.colorScheme.onSecondaryContainer
                             com.dejvik.stretchhero.data.Difficulty.INTERMEDIATE -> MaterialTheme.colorScheme.onTertiaryContainer
