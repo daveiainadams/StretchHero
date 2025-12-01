@@ -1,5 +1,10 @@
 package com.dejvik.stretchhero.data
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Star
+
 data class MilestoneChallenge(
     val id: String,
     val title: String,
@@ -9,11 +14,6 @@ data class MilestoneChallenge(
     val successMessage: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.Star
 
 object MilestoneChallengeData {
     val allChallenges = listOf(

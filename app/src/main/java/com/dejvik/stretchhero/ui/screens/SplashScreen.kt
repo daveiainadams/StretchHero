@@ -45,7 +45,7 @@ fun SplashScreen(navController: NavController, nextDestination: String) {
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = {
-                    androidx.compose.animation.core.OvershootInterpolator(2f).getInterpolation(it)
+                    OvershootInterpolator(2f).getInterpolation(it)
                 }
             )
         )
