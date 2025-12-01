@@ -90,7 +90,8 @@ fun StretchLibraryScreen(navController: NavController) {
 fun RoutineCard(routine: Routine, navController: NavController) {
     val context = LocalContext.current
     val imageResId = remember(routine.id) {
-        routine.steps.firstOrNull()?.imageResIdName?.getDrawableResourceId(context) ?: R.drawable.ic_stretch_placeholder
+        val id = routine.steps.firstOrNull()?.imageResIdName?.getDrawableResourceId(context) ?: 0
+        if (id != 0) id else R.drawable.ic_stretch_placeholder
     }
 
     Card(

@@ -281,7 +281,8 @@ fun StretchRoutineScreen(
                             )
 
                             val imageResId = remember(currentStep.imageResIdName) {
-                                currentStep.imageResIdName.getDrawableResourceId(context).takeIf { it != 0 } ?: R.drawable.ic_stretch_placeholder
+                                val id = currentStep.imageResIdName.getDrawableResourceId(context)
+                                if (id != 0) id else R.drawable.ic_stretch_placeholder
                             }
 
                             Card(
