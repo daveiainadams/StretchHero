@@ -10,6 +10,11 @@ data class MilestoneChallenge(
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Star
+
 object MilestoneChallengeData {
     val allChallenges = listOf(
         MilestoneChallenge(

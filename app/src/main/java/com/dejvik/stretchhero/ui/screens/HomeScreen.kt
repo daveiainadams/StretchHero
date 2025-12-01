@@ -40,7 +40,6 @@ import androidx.navigation.compose.rememberNavController
 import com.dejvik.stretchhero.navigation.Screen // Will be needed for navigation
 
 @Composable
-@Composable
 fun HomeScreen(navController: NavController) {
     Box(
         modifier = Modifier

@@ -29,6 +29,7 @@ import com.dejvik.stretchhero.ui.theme.montserratFont
 import com.dejvik.stretchhero.ui.theme.ralewayFont
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun OnboardingScreen(
     navController: NavController,

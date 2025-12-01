@@ -2,6 +2,7 @@ package com.dejvik.stretchhero.ui.screens
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import android.view.animation.OvershootInterpolator
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
