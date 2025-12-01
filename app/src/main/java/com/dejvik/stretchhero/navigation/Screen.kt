@@ -1,6 +1,7 @@
 package com.dejvik.stretchhero.navigation
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object Onboarding : Screen("onboarding")
     object Home : Screen("home") // Added Home screen
     object StretchLibrary : Screen("stretch_library")

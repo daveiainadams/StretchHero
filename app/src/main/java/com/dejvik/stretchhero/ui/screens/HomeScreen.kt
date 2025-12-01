@@ -48,9 +48,9 @@ fun HomeScreen(navController: NavController) {
             .background(
                 brush = androidx.compose.ui.graphics.Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF1A1D2E), // Deep night sky
-                        Color(0xFF2D3142), // Charcoal
-                        Color(0xFF3D2817)  // Warm ember glow at bottom
+                        MaterialTheme.colorScheme.background, // Deep night sky
+                        MaterialTheme.colorScheme.surface,    // Charcoal
+                        com.dejvik.stretchhero.ui.theme.EmberGlow  // Warm ember glow at bottom
                     )
                 )
             )

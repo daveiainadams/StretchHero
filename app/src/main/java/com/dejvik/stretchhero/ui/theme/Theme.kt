@@ -27,7 +27,9 @@ private val DarkColorScheme = darkColorScheme(
     primaryContainer = DeepCharcoal,
     onPrimaryContainer = GoldAccent,
     secondaryContainer = ForestGreen.copy(alpha = 0.3f),
-    onSecondaryContainer = WarmCream
+    onSecondaryContainer = WarmCream,
+    surfaceVariant = DeepCharcoal.copy(alpha = 0.8f),
+    onSurfaceVariant = WarmCream.copy(alpha = 0.7f)
 )
 
 private val LightColorScheme = lightColorScheme(

@@ -297,9 +297,9 @@ fun StretchRoutineScreen(
                                         painter = painterResource(id = imageResId),
                                         contentDescription = "Stretch Image: ${currentStep.name}",
                                         modifier = Modifier
-                                            .size(120.dp),
-                                        contentScale = ContentScale.Fit,
-                                        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                                            .fillMaxSize()
+                                            .padding(16.dp),
+                                        contentScale = ContentScale.Fit
                                     )
                                 }
                             }

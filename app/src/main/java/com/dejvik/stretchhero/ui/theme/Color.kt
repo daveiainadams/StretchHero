@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 val EmberOrange = Color(0xFFFF6B35)
 val DeepCharcoal = Color(0xFF2D3142)
 val GoldAccent = Color(0xFFF4A261)
+val EmberGlow = Color(0xFF3D2817) // Warm ember glow for gradients
 
 val ForestGreen = Color(0xFF2A9D8F)
 val SteelBlue = Color(0xFF457B9D)
